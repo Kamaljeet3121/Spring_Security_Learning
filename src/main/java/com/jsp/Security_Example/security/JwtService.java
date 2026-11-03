@@ -13,7 +13,7 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "my-secret-key-my-secret-key-my-secret-key";
+    private final String SECRET_KEY = "if-you-fully-trust-someone-you-get-one-eigher-someone-for-life-or-lesson-for-life";
 
     private final long EXPIRATION_TIME =  1000 * 60 * 30; // 30 minutes
 

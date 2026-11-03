@@ -1,7 +1,7 @@
 package com.jsp.Security_Example.security;
 
 import com.jsp.Security_Example.entity.User;
-import com.jsp.Security_Example.repository.UserRespository;
+import com.jsp.Security_Example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsServiceImp implements UserDetailsService {
-    private final UserRespository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {

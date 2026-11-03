@@ -1,15 +1,16 @@
 package com.jsp.Security_Example.security;
 
+import com.jsp.Security_Example.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,22 +22,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
+    private final MyUserDetailsServiceImp userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(  csrf -> csrf.disable())
+                .authenticationManager(authenticationManagerBean(userDetailsService,passwordEncoder))
                 .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests
                         (auth->auth.requestMatchers("/users/signup","/users/signin")
                 .permitAll().anyRequest().authenticated());
 //                .httpBasic(Customizer.withDefaults());
-                
+//
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return new ProviderManager();
+    public AuthenticationManager authenticationManagerBean(MyUserDetailsServiceImp userDetailsService, PasswordEncoder encoder) throws Exception {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(encoder);
+        return new ProviderManager(provider);
     }
 
 
