@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,14 +37,13 @@ public class UserServiceImp implements UserService {
 
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-
-
-
         if(auth.isAuthenticated()){
-            String token = jwtService.generateToken(user);
+
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            String token = jwtService.generateToken(userDetails);
             return "User logged in successfully & Tocken is: " + token;
         }else {
-            throw new RuntimeException("Password not match");
+            throw new RuntimeException("Authentication Failed");
         }
     }
 

@@ -22,7 +22,7 @@ public class UserController {
         return service.signup(user);
     }
 
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public String signin(@RequestBody User user) {
         return service.signin(user);
     }

@@ -4,6 +4,7 @@ import com.jsp.Security_Example.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -23,14 +24,11 @@ public class JwtService {
         );
     }
 
-    public String generateToken(User user) {
+    public String generateToken(UserDetails user) {
         return Jwts.builder()
                 .subject(user.getUsername())
-                .issuedAt(new Date())
-                .expiration(
-                        new Date(System.currentTimeMillis()
-                                + EXPIRATION_TIME)
-                )
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getKey())
                 .compact();
     }
@@ -40,12 +38,11 @@ public class JwtService {
         return getClaims(token).getSubject();
     }
 
-    public boolean isTokenValid(String token, String username) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
 
         String extractedUsername = extractUsername(token);
 
-        return extractedUsername.equals(username)
-                && !isTokenExpired(token);
+        return extractedUsername.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

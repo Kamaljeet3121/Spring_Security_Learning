@@ -13,7 +13,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_seq")
     @SequenceGenerator(name = "user_seq",initialValue =  1,allocationSize = 1)
     private int id;
     @Column(unique = true)

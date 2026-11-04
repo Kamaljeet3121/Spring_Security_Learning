@@ -1,6 +1,7 @@
 package com.jsp.Security_Example.security;
 
 import com.jsp.Security_Example.entity.User;
+import com.jsp.Security_Example.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final MyUserDetailsServiceImp userDetailsService;
+    private final JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,9 +34,11 @@ public class SecurityConfig {
                 .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests
                         (auth->auth.requestMatchers("/users/signup","/users/signin")
-                .permitAll().anyRequest().authenticated());
+                .permitAll().anyRequest().authenticated())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
 //                .httpBasic(Customizer.withDefaults());
-//
+
         return http.build();
     }
 

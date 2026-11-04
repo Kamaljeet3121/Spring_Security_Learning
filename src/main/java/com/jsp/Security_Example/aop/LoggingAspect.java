@@ -19,7 +19,7 @@ public class LoggingAspect {
 
     //after is also same
 
-    @Around("execution(* com.jsp.Security_Example.*.*.*(..))")
+    @Around("execution(* com.jsp.Security_Example.Controller.*.*(..))|| execution(* com.jsp.Security_Example.Service.*.*(..))")
     public Object loggingMethod2(ProceedingJoinPoint joinPoint) {
         log.info("Entering logging method "+joinPoint.getSignature().getName());
         long start = System.currentTimeMillis();
