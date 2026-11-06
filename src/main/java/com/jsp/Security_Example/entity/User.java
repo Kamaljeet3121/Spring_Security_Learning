@@ -10,11 +10,11 @@ import java.util.List;
 
 @Entity(name="users")
 @Data
-public class User implements UserDetails {
+public class User extends BaseClass implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_seq")
-    @SequenceGenerator(name = "user_seq",initialValue =  1,allocationSize = 1)
+    @SequenceGenerator(name = "user_seq",initialValue =  10,allocationSize = 1)
     private int id;
     @Column(unique = true)
     private String username;
